@@ -48,9 +48,9 @@ Berdasarkan informasi dari Kaggle, variabel-variabel pada Diabetes Dataset adala
 
 **Exploratory Data Analysis (EDA) - Univariate Analysis**
 pada dataset yang ada, fitur yang bertipe numerik dengan tipe int64, yaitu Pregnancies, Glucose, BloodPressure, SkinThickness, Insulin, Age dan Outcome.Sedangkan fitur yang bertipe numerik dengan tipe float64, yaitu BMI dan DiabetesPedigreeFunction.
-Berikut info diabetes dataset sebagai berikut:
+Berikut info diabetes dataset sebagai:
 
-![univariat numerical fitur](variabel_info.png)
+![univariat numerical fitur](https://github.com/esteryuricha/ml-advanced/blob/4b80f0a58b189f2552015f097989b12a2a5319ad/Screenshot%202024-11-19%20161410.png)
 
 **Exploratory Data Analysis (EDA) - Multivariate Analysis**
 
