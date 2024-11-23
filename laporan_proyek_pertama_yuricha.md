@@ -1,4 +1,4 @@
-# Laporan Proyek: Prediksi Risiko Seseorang Mengidap Diabetes
+# Laporan Proyek: Prediksi Risiko Seseorang Mengidap Diabetes - Yuricha
 
 ## Domain Proyek
 
@@ -17,11 +17,10 @@ Pendeteksian dini terhadap risiko diabetes memungkinkan intervensi lebih awal me
 
 - Mengidentifikasi variabel-variabel penting yang berkontribusi terhadap risiko diabetes.
 - Membangun model prediktif berbasis machine learning untuk memberikan indikasi dini risiko diabetes.
-- Mendukung kampanye pencegahan dan edukasi kesehatan masyarakat berbasis data.
 
 ### Solution Statement
 
-Solusi yang akan diterapkan adalah mengembangkan model prediksi menggunakan algoritma machine learning, seperti Logistic Regression, Random Forest, dan Gradient Boosting. Model akan dilatih dengan data historis yang mencakup faktor risiko diabetes, seperti kadar glukosa, tekanan darah, indeks massa tubuh (BMI), dan riwayat keluarga.
+Solusi yang akan diterapkan adalah mengembangkan model prediksi menggunakan algoritma machine learning, seperti K-Nearest Neighbor, Random Forest, dan Adaptive Boosting. Model akan dilatih dengan data historis yang mencakup faktor risiko diabetes, seperti kadar glukosa, tekanan darah, indeks massa tubuh (BMI), dan riwayat keluarga.
 
 ## Data Understanding
 
@@ -47,53 +46,95 @@ Berdasarkan informasi dari Kaggle, variabel-variabel pada Diabetes Dataset adala
 - _Outcome_: Status diabetes (1 = diabetes, 0 = tidak diabetes).
 
 **Exploratory Data Analysis (EDA) - Univariate Analysis**
-pada dataset yang ada, fitur yang bertipe numerik dengan tipe int64, yaitu Pregnancies, Glucose, BloodPressure, SkinThickness, Insulin, Age dan Outcome.Sedangkan fitur yang bertipe numerik dengan tipe float64, yaitu BMI dan DiabetesPedigreeFunction.
-Berikut info diabetes dataset sebagai:
+pada dataset yang ada, fitur yang bertipe numerik dengan tipe int64, yaitu _Pregnancies_, _Glucose_, _BloodPressure_, _SkinThickness_, _Insulin_, _Age_ dan _Outcome_.
+Sedangkan fitur yang bertipe numerik dengan tipe float64, yaitu _BMI_ dan _DiabetesPedigreeFunction_.
+Berikut grafik Univariate Analysis dari dataset diabetes sebagai berikut:
 
-![univariat numerical fitur](https://github.com/esteryuricha/ml-advanced/blob/4b80f0a58b189f2552015f097989b12a2a5319ad/Screenshot%202024-11-19%20161410.png)
+![univariat numerical fitur](https://user-images.githubusercontent.com/110774645/190312958-3adc1d6a-3232-49b1-9ad9-6c63ab6b4a01.png)
 
 **Exploratory Data Analysis (EDA) - Multivariate Analysis**
+Multivariate EDA menunjukkan hubungan antara dua atau lebih variabel pada data. Berikut adalah relasi pasangan dalam dataset:
+
+Berikut adalah hubungan korelasi antar fitur yang koefisien korelasinya berkisar antara -1 dan +1, yang mengukur kekuatan hubungan antara dua variabel serta arahnya (positif atau negatif).
+
+(gambar)
 
 ## Data Preparation
 
-1. **Pembersihan Data**
+Pada Data Preparation dilakukan beberapa tahapan sebagai berikut:
 
-   - Menghapus data yang tidak valid atau noise.
-   - Mengatasi missing value dengan imputasi, seperti mean untuk data numerik.
+1. **Normalisasi Data Menggunakan MinMaxScaler**
+   Karena Outcome sudah memiliki nilai 0 dan 1 maka Fitur Outcome akan direduksi sementara lalu akan dilakukan standarisasi data terhadap fitur lainnya. Sehingga didapatkan data setelah normalisasi sebagai berikut:
 
-2. **Split Data**
+   (gambar)
 
-   - Membagi dataset menjadi 80% data pelatihan dan 20% data pengujian.
+2. **Reduksi dimensi dengan Principal Component Analysis (PCA)**
+   Jika dilihat dari pairplot yang ada, didapatkan bahwa **Glucose** dan **BMI** menjadi PC Pertama yang memiliki nilai varian tinggi. Sedangkan
 
-3. **Feature Scaling**
-
-   - Normalisasi variabel numerik seperti Glucose, Blood Pressure, dan BMI untuk memastikan skala seragam.
-
-4. **Balancing Data**
-   - Jika dataset tidak seimbang (diabetes vs tidak diabetes), metode oversampling seperti SMOTE akan diterapkan.
+3. **Split Data**
+   Dataset akan dibagi menjadi 80% data training dan 20% data testing. Pembagian dataset menggunakan **train_test_split**.
 
 ## Modeling
 
 Model akan dikembangkan menggunakan beberapa algoritma berikut:
 
-- **Logistic Regression**: Model baseline yang sederhana dan interpretatif.
-- **Random Forest**: Untuk menangkap pola non-linear antar fitur.
-- **Gradient Boosting**: Untuk meningkatkan akurasi melalui pendekatan boosting.
+- **K-Nearest Neighbor**
+  Model dilatih menggunakan nilai n_neighbors sebesar 12. Algoritma ini cocok digunakan pada data yang ukurannya kecil dan pola non-linear seperti dataset ini.
+
+- **Random Forest**
+  Model menggunakan n_estimators sebanyak 100 dengan maksimal kedalaman setiap estimator adalah sebesar 5, sedangkan nilai random_state yang digunakan adalah sebesar 12 dan n-jobs diisikan nilai -1.
+
+- **Boosting Algorithm**
+  Model menggunakan nilai n_estimators sebesar 200 dengan learning_rate sebesar 0.05 dan random_state yang digunakan adalah 55.
 
 ## Evaluation
 
-Model akan dievaluasi menggunakan metrik berikut:
+Evaluasi awal dengan memeriksa nilai MSE dari tiap algoritma dan menghasilkan data sebagai berikut:
+
+Tabel hasil Train MSE vs Test MSE:
+| | Train MSE | Test MSE |
+|--|-----------|----------|
+|KNN|0.000152|0.000154|
+|RF|0.00011|0.000117|
+|Boosting|0.000146|0.000142|
+
+Hasil menunjukkan bahwa RF memiliki nilai MSE paling rendah diantara kedua model lainnya. Sehingga, model terbaik untuk dataset ini adalah RF.
+
+Lalu data diuji prediksinya dan menghasilkan data sebagai berikut:
+
+```
+      y_true	prediksi_KNN	prediksi_RF    prediksi_Boosting
+229   0	      0.3	         0.3	         0.4
+```
+
+Model kemudian dihitung nilai koefisien determinasinya untuk mendapatkan seberapa baik model menjelaskan variansi dalam data target yaitu Outcome, dan didapatkan data sebagai berikut:
+
+||Koefisien Determinasi|
+|RF|0.4948855841865071|
+|Boosting|0.3331561791383221|
+|KNN| 0.3872930369532044|
+
+Dari hasil koefisien, dapat disimpulkan bahwa model yang terbaik adalah RF.
+
+Kemudian, dilakukan evaluasi kembali dengan metrik berikut dengan menggunakan RandomForest (RF):
 
 - **Accuracy**: Persentase prediksi yang benar.
+  Nilai yang didapatkan adalah sebesar 0.84415
+
 - **Precision dan Recall**: Untuk menilai deteksi risiko diabetes pada kelas minoritas.
+  Nilai yang didapat untuk nilai precision adalah sebesar 0.83333 dan nilai re-call adalah sebesar 0.71428
+
 - **F1-Score**: Kombinasi antara precision dan recall.
-- **ROC-AUC**: Menilai kemampuan model dalam membedakan antara individu dengan dan tanpa risiko diabetes.
+  Nilai yang didapatkan adalah sebesar 0.76923
 
 ## Kesimpulan
 
-Proyek ini bertujuan untuk membantu mendeteksi risiko diabetes pada individu menggunakan pendekatan machine learning. Model yang dikembangkan diharapkan dapat memberikan prediksi akurat untuk mendukung intervensi dini dan meningkatkan kesadaran kesehatan masyarakat.
+Faktor utama yang memengaruhi kemungkinan seseorang mengidap diabetes dapat dilihat dari hasil PCA dan dari PC Pertama, yaitu Kehamilan (Pregnancies), Glucose, BloodPressure, SkinThickness, Insulin, BMI, DiabetesPedigreeFunction, dan Age.
+
+Model prediktif yang tepat digunakan adalah menggunakan Random Forest untuk mendeteksi risiko diabetes pada individu.
 
 **Referensi**
 
-- Dataset: Pima Indians Diabetes Dataset
-- Artikel: [Using Machine Learning for Diabetes Prediction](https://www.example.com)
+- Dataset Diabetes dari Kaggle (https://www.kaggle.com/api/v1/datasets/download/akshaydattatraykhare/diabetes-dataset/)
+- https://kemkes.go.id/id/pola-hidup-sehat-dan-deteksi-dini-bantu-kontrol-gula-darah-pada-penderita-diabetes
+- studi kasus pertama predictive analiytics [machine learning terapan](https://www.dicoding.com/academies/319/tutorials/16989)
