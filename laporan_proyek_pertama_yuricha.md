@@ -50,14 +50,16 @@ pada dataset yang ada, fitur yang bertipe numerik dengan tipe int64, yaitu _Preg
 Sedangkan fitur yang bertipe numerik dengan tipe float64, yaitu _BMI_ dan _DiabetesPedigreeFunction_.
 Berikut grafik Univariate Analysis dari dataset diabetes sebagai berikut:
 
-![univariat numerical fitur](https://user-images.githubusercontent.com/110774645/190312958-3adc1d6a-3232-49b1-9ad9-6c63ab6b4a01.png)
+![univariat numerical fitur](https://github.com/esteryuricha/ml-advanced/blob/main/images/histogram%20univariate.png)
 
 **Exploratory Data Analysis (EDA) - Multivariate Analysis**
 Multivariate EDA menunjukkan hubungan antara dua atau lebih variabel pada data. Berikut adalah relasi pasangan dalam dataset:
 
+![multivariate analysis](https://github.com/esteryuricha/ml-advanced/blob/6e7df288e7770a593a55bf8173229194d116d525/images/multivariate.png)
+
 Berikut adalah hubungan korelasi antar fitur yang koefisien korelasinya berkisar antara -1 dan +1, yang mengukur kekuatan hubungan antara dua variabel serta arahnya (positif atau negatif).
 
-(gambar)
+![korelasi antar-fitur](https://github.com/esteryuricha/ml-advanced/blob/6e7df288e7770a593a55bf8173229194d116d525/images/correlation_matrix.png)
 
 ## Data Preparation
 
@@ -66,13 +68,13 @@ Pada Data Preparation dilakukan beberapa tahapan sebagai berikut:
 1. **Normalisasi Data Menggunakan MinMaxScaler**
    Karena Outcome sudah memiliki nilai 0 dan 1 maka Fitur Outcome akan direduksi sementara lalu akan dilakukan standarisasi data terhadap fitur lainnya. Sehingga didapatkan data setelah normalisasi sebagai berikut:
 
-   (gambar)
+   ![korelasi antar-fitur](https://github.com/esteryuricha/ml-advanced/blob/8139ac47e2cd809e54c544c97e84838b6e89cf2a/images/Screenshot%202024-11-23%20100808.png)
 
-2. **Reduksi dimensi dengan Principal Component Analysis (PCA)**
-   Jika dilihat dari pairplot yang ada, didapatkan bahwa **Glucose** dan **BMI** menjadi PC Pertama yang memiliki nilai varian tinggi. Sedangkan
+2. **Mencari Principal Component Analysis (PCA)**
+   Jika dilihat dari pairplot yang ada, didapatkan bahwa _Pregnancies_, _Glucose_, _BloodPressure_, _SkinThickness_, _Insulin_, _BMI_, _DiabetesPedigreeFunction_, dan _Age_ menjadi PC Pertama. Nilai varian yang tinggi adalah _Age_ sebesar 0.68, _Pregnancies_ sebesar 0.65, dan _Glucose_ sebesar 0.24
 
 3. **Split Data**
-   Dataset akan dibagi menjadi 80% data training dan 20% data testing. Pembagian dataset menggunakan **train_test_split**.
+   Dataset akan dibagi menjadi 80% data training dan 20% data testing. Pembagian dataset menggunakan **train_test_split**. Sehingga nilai test_size adalah 0.2.
 
 ## Modeling
 
@@ -129,7 +131,7 @@ Kemudian, dilakukan evaluasi kembali dengan metrik berikut dengan menggunakan Ra
 
 ## Kesimpulan
 
-Faktor utama yang memengaruhi kemungkinan seseorang mengidap diabetes dapat dilihat dari hasil PCA dan dari PC Pertama, yaitu Kehamilan (Pregnancies), Glucose, BloodPressure, SkinThickness, Insulin, BMI, DiabetesPedigreeFunction, dan Age.
+Faktor utama yang memengaruhi kemungkinan seseorang mengidap diabetes dapat dilihat dari hasil PCA dan dari PC Pertama, yaitu _Age_ (umur), _Pregnancies_ (kehamilan), dan _Glucose_ (kadar gula).
 
 Model prediktif yang tepat digunakan adalah menggunakan Random Forest untuk mendeteksi risiko diabetes pada individu.
 
