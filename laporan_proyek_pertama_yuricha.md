@@ -50,16 +50,16 @@ pada dataset yang ada, fitur yang bertipe numerik dengan tipe int64, yaitu _Preg
 Sedangkan fitur yang bertipe numerik dengan tipe float64, yaitu _BMI_ dan _DiabetesPedigreeFunction_.
 Berikut grafik Univariate Analysis dari dataset diabetes sebagai berikut:
 
-![univariat numerical fitur](https://github.com/esteryuricha/ml-advanced/blob/main/images/histogram%20univariate.png)
+![univariat numerical fitur](https://github.com/esteryuricha/ml-advanced/blob/main/images/histogram%20univariate.png?raw=true)
 
 **Exploratory Data Analysis (EDA) - Multivariate Analysis**
 Multivariate EDA menunjukkan hubungan antara dua atau lebih variabel pada data. Berikut adalah relasi pasangan dalam dataset:
 
-![multivariate analysis](https://github.com/esteryuricha/ml-advanced/blob/6e7df288e7770a593a55bf8173229194d116d525/images/multivariate.png)
+![multivariate analysis](https://github.com/esteryuricha/ml-advanced/blob/main/images/multivariate.png?raw=true)
 
 Berikut adalah hubungan korelasi antar fitur yang koefisien korelasinya berkisar antara -1 dan +1, yang mengukur kekuatan hubungan antara dua variabel serta arahnya (positif atau negatif).
 
-![korelasi antar-fitur](https://github.com/esteryuricha/ml-advanced/blob/6e7df288e7770a593a55bf8173229194d116d525/images/correlation_matrix.png)
+![korelasi antar-fitur](https://github.com/esteryuricha/ml-advanced/blob/main/images/correlation_matrix.png?raw=true)
 
 ## Data Preparation
 
@@ -68,10 +68,14 @@ Pada Data Preparation dilakukan beberapa tahapan sebagai berikut:
 1. **Normalisasi Data Menggunakan MinMaxScaler**
    Karena Outcome sudah memiliki nilai 0 dan 1 maka Fitur Outcome akan direduksi sementara lalu akan dilakukan standarisasi data terhadap fitur lainnya. Sehingga didapatkan data setelah normalisasi sebagai berikut:
 
-   ![korelasi antar-fitur](https://github.com/esteryuricha/ml-advanced/blob/8139ac47e2cd809e54c544c97e84838b6e89cf2a/images/Screenshot%202024-11-23%20100808.png)
+   ![korelasi antar-fitur](https://github.com/esteryuricha/ml-advanced/blob/main/images/correlation_matrix.png?raw=true)
 
 2. **Mencari Principal Component Analysis (PCA)**
    Jika dilihat dari pairplot yang ada, didapatkan bahwa _Pregnancies_, _Glucose_, _BloodPressure_, _SkinThickness_, _Insulin_, _BMI_, _DiabetesPedigreeFunction_, dan _Age_ menjadi PC Pertama. Nilai varian yang tinggi adalah _Age_ sebesar 0.68, _Pregnancies_ sebesar 0.65, dan _Glucose_ sebesar 0.24
+
+   Berikut ini adalah hasil loading fitur PC Pertama dan PC Kedua:
+
+   ![hasil loading fitur](https://github.com/esteryuricha/ml-advanced/blob/main/images/Screenshot%202024-11-23%20172630.png?raw=true)
 
 3. **Split Data**
    Dataset akan dibagi menjadi 80% data training dan 20% data testing. Pembagian dataset menggunakan **train_test_split**. Sehingga nilai test_size adalah 0.2.
@@ -84,10 +88,10 @@ Model akan dikembangkan menggunakan beberapa algoritma berikut:
   Model dilatih menggunakan nilai n_neighbors sebesar 12. Algoritma ini cocok digunakan pada data yang ukurannya kecil dan pola non-linear seperti dataset ini.
 
 - **Random Forest**
-  Model menggunakan n_estimators sebanyak 100 dengan maksimal kedalaman setiap estimator adalah sebesar 5, sedangkan nilai random_state yang digunakan adalah sebesar 12 dan n-jobs diisikan nilai -1.
+  Model menggunakan n_estimators sebanyak 100 dengan maksimal kedalaman setiap estimator adalah sebesar 5, sedangkan nilai random_state yang digunakan adalah sebesar 12 dan n-jobs diisikan nilai -1. Random Forest sering digunakan untuk mendapatkan stabilitas yang mumpuni.
 
 - **Boosting Algorithm**
-  Model menggunakan nilai n_estimators sebesar 200 dengan learning_rate sebesar 0.05 dan random_state yang digunakan adalah 55.
+  Model menggunakan nilai n_estimators sebesar 200 dengan learning_rate sebesar 0.05 dan random_state yang digunakan adalah 55. Boosting Algorithm yang digunakan adalah Adaptive Boosting yaitu AdaBoost.
 
 ## Evaluation
 
@@ -111,10 +115,11 @@ Lalu data diuji prediksinya dan menghasilkan data sebagai berikut:
 
 Model kemudian dihitung nilai koefisien determinasinya untuk mendapatkan seberapa baik model menjelaskan variansi dalam data target yaitu Outcome, dan didapatkan data sebagai berikut:
 
-||Koefisien Determinasi|
-|RF|0.4948855841865071|
-|Boosting|0.3331561791383221|
-|KNN| 0.3872930369532044|
+|          | Koefisien Determinasi |
+| -------- | --------------------- |
+| RF       | 0.4948855841865071    |
+| Boosting | 0.3331561791383221    |
+| KNN      | 0.3872930369532044    |
 
 Dari hasil koefisien, dapat disimpulkan bahwa model yang terbaik adalah RF.
 
