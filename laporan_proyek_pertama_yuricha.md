@@ -103,13 +103,13 @@ Pada Data Preparation dilakukan beberapa tahapan sebagai berikut:
 Model akan dikembangkan menggunakan beberapa algoritma berikut:
 
 - **K-Nearest Neighbor**
-  Model dilatih menggunakan nilai n_neighbors sebesar 12 dengan metrik jarak **Euclidean**. Jarak yang diambil adalah sebesar 12 dengan iterasi terus menerus sehingga didapatkan nilai MSE untuk data train dan data test. Algoritma ini cocok digunakan pada data yang ukurannya kecil dan pola non-linear seperti dataset ini.
+  Model dilatih menggunakan nilai n_neighbors sebesar 5 dengan metrik jarak **Euclidean**. Jarak yang diambil adalah sebesar 5 dengan iterasi terus menerus sehingga didapatkan nilai MSE untuk data train dan data test. Algoritma ini cocok digunakan pada data yang ukurannya kecil dan pola non-linear seperti dataset ini. CARA KERJA algoritma ini adalah membandingkan jarak satu sampel ke sampel pelatihan lain dengan memilih sejumlah tetangga terdekat.
 
 - **Random Forest**
-  Random Forest menggunakan model ensemble yang pada proyek ini diatur value parameter pada n_estimators sebanyak 100 dengan maksimal kedalaman setiap estimator adalah sebesar 5, sedangkan nilai random_state yang digunakan adalah sebesar 12 dan n-jobs diisikan nilai -1. Random Forest sering digunakan untuk mendapatkan stabilitas saat melakukan prediksi.
+  Random Forest menggunakan model ensemble yang pada proyek ini diatur value parameter pada n_estimators sebanyak 150 dengan maksimal kedalaman setiap estimator adalah sebesar 10, sedangkan nilai random_state yang digunakan adalah sebesar 12 dan n-jobs diisikan nilai -1. Random Forest sering digunakan untuk mendapatkan stabilitas saat melakukan prediksi. CARA KERJANYA adalah membuat banyak pohon keputusan dari subset data, hasil ditentukan dari rata-rata/voting.
 
 - **Boosting Algorithm**
-  Model menggunakan nilai n_estimators sebesar 200 dengan learning_rate sebesar 0.05 dan random_state yang digunakan adalah 55. Boosting Algorithm yang digunakan adalah Adaptive Boosting yaitu AdaBoost. Iterasi yang dilakukan terus menerus sebanyak jumlah yang ditentukan, memungkinkan akurasi data yang semakin baik.
+  Model menggunakan nilai n_estimators sebesar 200 dengan learning_rate sebesar 0.05 dan random_state yang digunakan adalah 55. Boosting Algorithm yang digunakan adalah Adaptive Boosting yaitu AdaBoost. Iterasi yang dilakukan terus menerus sebanyak jumlah yang ditentukan, memungkinkan akurasi data yang semakin baik. CARA KERJAnya adalah dengan membangun model sederhana berurutan dan berfokus pada kesalahan data sebelumnya.
 
 ## Evaluation
 
@@ -118,45 +118,45 @@ Evaluasi awal dengan memeriksa nilai MSE dari tiap algoritma dan menghasilkan da
 Tabel hasil Train MSE vs Test MSE:
 | | Train MSE | Test MSE |
 |--|-----------|----------|
-|KNN|0.000152|0.000154|
-|RF|0.00011|0.000117|
+|KNN|0.000135|0.000195|
+|RF|0.00066|0.000124|
 |Boosting|0.000146|0.000142|
 
-Hasil menunjukkan bahwa RF memiliki nilai MSE paling rendah diantara kedua model lainnya. Sehingga, model terbaik untuk dataset ini adalah RF.
+Hasil menunjukkan bahwa RF memiliki nilai MSE paling rendah diantara kedua model lainnya. Sehingga, model terbaik untuk dataset ini adalah **RandomForest**.
 
 Lalu data diuji prediksinya dan menghasilkan data sebagai berikut:
 
 ```
       y_true	prediksi_KNN	prediksi_RF    prediksi_Boosting
-229   0	      0.3	         0.3	         0.4
+229   0	      0.4	         0.4	         0.4
 ```
 
 Model kemudian dihitung nilai koefisien determinasinya untuk mendapatkan seberapa baik model menjelaskan variansi dalam data target yaitu Outcome, dan didapatkan data sebagai berikut:
 
 |          | Koefisien Determinasi |
 | -------- | --------------------- |
-| RF       | 0.4948855841865071    |
-| Boosting | 0.3331561791383221    |
+| RF       | 0.4641646162225911    |
+| Boosting | 0.15816326530612246   |
 | KNN      | 0.3872930369532044    |
 
-Dari hasil koefisien, dapat disimpulkan bahwa model yang terbaik adalah RF.
+Dari hasil koefisien, dapat disimpulkan bahwa model yang terbaik adalah **Random Forest**.
 
-Kemudian, dilakukan evaluasi kembali dengan metrik berikut dengan menggunakan RandomForest (RF):
+Kemudian, dilakukan evaluasi kembali dengan metrik berikut dengan menggunakan **RandomForest (RF)**:
 
 - **Accuracy**: Persentase prediksi yang benar.
-  Nilai yang didapatkan adalah sebesar 0.84415
+  Nilai yang didapatkan adalah sebesar 0.812
 
 - **Precision dan Recall**: Untuk menilai deteksi risiko diabetes pada kelas minoritas.
-  Nilai yang didapat untuk nilai precision adalah sebesar 0.83333 dan nilai re-call adalah sebesar 0.71428
+  Nilai yang didapat untuk nilai precision adalah sebesar 0.75 dan nilai re-call adalah sebesar 0.75
 
 - **F1-Score**: Kombinasi antara precision dan recall.
-  Nilai yang didapatkan adalah sebesar 0.76923
+  Nilai yang didapatkan adalah sebesar 0.75
 
 ## Kesimpulan
 
 Faktor utama yang memengaruhi kemungkinan seseorang mengidap diabetes dapat dilihat dari hasil PCA dan dari PC Pertama, yaitu _Age_ (umur), _Pregnancies_ (kehamilan), dan _Glucose_ (kadar gula).
 
-Model prediktif yang tepat digunakan adalah menggunakan Random Forest untuk mendeteksi risiko diabetes pada individu.
+Model prediktif yang tepat digunakan adalah menggunakan **Random Forest** untuk mendeteksi risiko diabetes pada individu.
 
 **Referensi**
 
