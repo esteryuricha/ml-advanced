@@ -1,5 +1,7 @@
 # Laporan Proyek: Prediksi Risiko Seseorang Mengidap Diabetes - Yuricha
 
+Proyek ini membangun model prediktif untuk memprediksi risiko seseorang mengidap diabetes dari riwayat kesehatan yang ada dan menentukan faktor-faktor utama yang memengaruhi kemungkinan seseorang mengidap diabetes.
+
 ## Domain Proyek
 
 Diabetes merupakan salah satu penyakit tidak menular yang sampai di tahun 2024 menjadi penyakit mematikan nomor 6 di dunia dan sebagai penyakit penyebab kematian tertinggi ketiga di Indonesia. Berdasarkan data dari WHO, prevalensi diabetes terus meningkat dari tahun ke tahun diikuti dengan tren makanan minuman manis yang semakin banyak bermunculan dan mudah diakses oleh semua kalangan.
@@ -30,7 +32,7 @@ Informasi | Keterangan
 Link | https://www.kaggle.com/api/v1/datasets/download/akshaydattatraykhare/diabetes-dataset/
 Lisensi | CC0: Public Domain
 Size | 54.1 kB
-Data | 768 rows
+Data | 768 rows & 9 columns
 
 **Exploratory Data Analysis (EDA) - Deskripsi Variabel**
 Berdasarkan informasi dari Kaggle, variabel-variabel pada Diabetes Dataset adalah sebagai berikut:
@@ -45,6 +47,9 @@ Berdasarkan informasi dari Kaggle, variabel-variabel pada Diabetes Dataset adala
 - _Age_: Usia individu (tahun).
 - _Outcome_: Status diabetes (1 = diabetes, 0 = tidak diabetes).
 
+**Kualitas Dataset**
+Berdasarkan hasil `data.info()` dan `data.isnull().sum()` bahwa semua kolom terisi dan tidak ada missing value.
+
 **Exploratory Data Analysis (EDA) - Univariate Analysis**
 pada dataset yang ada, fitur yang bertipe numerik dengan tipe int64, yaitu _Pregnancies_, _Glucose_, _BloodPressure_, _SkinThickness_, _Insulin_, _Age_ dan _Outcome_.
 Sedangkan fitur yang bertipe numerik dengan tipe float64, yaitu _BMI_ dan _DiabetesPedigreeFunction_.
@@ -52,21 +57,34 @@ Berikut grafik Univariate Analysis dari dataset diabetes sebagai berikut:
 
 ![univariat numerical fitur](https://github.com/esteryuricha/ml-advanced/blob/main/images/histogram%20univariate.png?raw=true)
 
+Beberapa hal yang dapat dianalisis dari hasil histogram yang ada, yaitu:
+
+- **Pregnancies**: Distribusi skewed ke kanan. Sebagian besar individu memiliki jumlah kehamilan rendah (0-3).
+- **Glucose**: Distribusi mendekati normal dengan puncak sekitar 100-150.
+- **BloodPressure**: Distribusi normal, puncak di 60-80.
+- **SkinThickness**: Skewed ke kanan, dengan beberapa nilai nol yang mencurigakan (missing value).
+- **Insulin**: Skewed ke kanan. Banyak nilai mendekati nol yang kemungkinan juga missing value.
+- **BMI**: Distribusi simetris dengan puncak di sekitar 30.
+- **DiabetesPedigreeFunction**: Skewed ke kanan, menunjukkan kontribusi genetik terhadap diabetes.
+- **Age**: Skewed ke kanan, didominasi individu berusia 20-50 tahun.
+- **Outcome**: Dataset imbalanced, dengan lebih banyak individu tanpa diabetes (0).
+
 **Exploratory Data Analysis (EDA) - Multivariate Analysis**
 Multivariate EDA menunjukkan hubungan antara dua atau lebih variabel pada data. Berikut adalah relasi pasangan dalam dataset:
 
 ![multivariate analysis](https://github.com/esteryuricha/ml-advanced/blob/main/images/multivariate.png?raw=true)
 
-Berikut adalah hubungan korelasi antar fitur yang koefisien korelasinya berkisar antara -1 dan +1, yang mengukur kekuatan hubungan antara dua variabel serta arahnya (positif atau negatif).
+Dari hasil analisis multivariate dapat terlihat bahwa hubungan :
 
-![korelasi antar-fitur](https://github.com/esteryuricha/ml-advanced/blob/main/images/correlation_matrix.png?raw=true)
+- **Glucose** dengan **Outcome** memperlihatkan bahwa semakin tinggi kadar glukosa maka kemungkinan outcome menghasilkan 1 lebih tinggi.
+- **BMI** dengan **Outcome** memperlihatkan bahwa BMI tinggi cenderung memiliki outcome diabetes.
 
 ## Data Preparation
 
 Pada Data Preparation dilakukan beberapa tahapan sebagai berikut:
 
 1. **Normalisasi Data Menggunakan MinMaxScaler**
-   Karena Outcome sudah memiliki nilai 0 dan 1 maka Fitur Outcome akan direduksi sementara lalu akan dilakukan standarisasi data terhadap fitur lainnya. Sehingga didapatkan data setelah normalisasi sebagai berikut:
+   Karena Outcome sudah memiliki nilai 0 dan 1 maka Fitur Outcome akan direduksi sementara lalu akan dilakukan standarisasi data terhadap fitur lainnya agar nilai memiliki skala yang sama. Sehingga didapatkan data setelah normalisasi sebagai berikut:
 
    ![korelasi antar-fitur](https://github.com/esteryuricha/ml-advanced/blob/main/images/correlation_matrix.png?raw=true)
 
@@ -78,14 +96,14 @@ Pada Data Preparation dilakukan beberapa tahapan sebagai berikut:
    ![hasil loading fitur](https://github.com/esteryuricha/ml-advanced/blob/main/images/Screenshot%202024-11-23%20172630.png?raw=true)
 
 3. **Split Data**
-   Dataset akan dibagi menjadi 80% data training dan 20% data testing. Pembagian dataset menggunakan **train_test_split**. Sehingga nilai test_size adalah 0.2.
+   Dataset akan dibagi menjadi 90% data training dan 10% data testing. Pembagian dataset menggunakan **train_test_split**. Sehingga nilai test_size adalah 0.1.
 
 ## Modeling
 
 Model akan dikembangkan menggunakan beberapa algoritma berikut:
 
 - **K-Nearest Neighbor**
-  Model dilatih menggunakan nilai n_neighbors sebesar 12. Algoritma ini cocok digunakan pada data yang ukurannya kecil dan pola non-linear seperti dataset ini.
+  Model dilatih menggunakan nilai n_neighbors sebesar 12 dengan metrik jarak **Euclidean**. Algoritma ini cocok digunakan pada data yang ukurannya kecil dan pola non-linear seperti dataset ini.
 
 - **Random Forest**
   Model menggunakan n_estimators sebanyak 100 dengan maksimal kedalaman setiap estimator adalah sebesar 5, sedangkan nilai random_state yang digunakan adalah sebesar 12 dan n-jobs diisikan nilai -1. Random Forest sering digunakan untuk mendapatkan stabilitas yang mumpuni.
