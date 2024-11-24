@@ -84,9 +84,9 @@ Dari hasil analisis multivariate dapat terlihat bahwa hubungan :
 Pada Data Preparation dilakukan beberapa tahapan sebagai berikut:
 
 1. **Normalisasi Data Menggunakan MinMaxScaler**
-   Karena Outcome sudah memiliki nilai 0 dan 1 maka Fitur Outcome akan direduksi sementara lalu akan dilakukan standarisasi data terhadap fitur lainnya agar nilai memiliki skala yang sama. Sehingga didapatkan data setelah normalisasi sebagai berikut:
+   Karena Outcome sudah memiliki nilai 0 dan 1 maka Fitur Outcome akan direduksi sementara lalu akan dilakukan standarisasi data terhadap fitur lainnya agar nilai memiliki skala yang sama sehingga data yang ditampilkan dapat dilihat sebagai berikut:
 
-   ![korelasi antar-fitur](https://github.com/esteryuricha/ml-advanced/blob/main/images/correlation_matrix.png?raw=true)
+   ![multivariate analysis](https://github.com/esteryuricha/ml-advanced/blob/8139ac47e2cd809e54c544c97e84838b6e89cf2a/images/Screenshot%202024-11-23%20100808.png?raw=true)
 
 2. **Mencari Principal Component Analysis (PCA)**
    Jika dilihat dari pairplot yang ada, didapatkan bahwa _Pregnancies_, _Glucose_, _BloodPressure_, _SkinThickness_, _Insulin_, _BMI_, _DiabetesPedigreeFunction_, dan _Age_ menjadi PC Pertama. Nilai varian yang tinggi adalah _Age_ sebesar 0.68, _Pregnancies_ sebesar 0.65, dan _Glucose_ sebesar 0.24
@@ -98,18 +98,18 @@ Pada Data Preparation dilakukan beberapa tahapan sebagai berikut:
 3. **Split Data**
    Dataset akan dibagi menjadi 90% data training dan 10% data testing. Pembagian dataset menggunakan **train_test_split**. Sehingga nilai test_size adalah 0.1.
 
-## Modeling
+## Model Development
 
 Model akan dikembangkan menggunakan beberapa algoritma berikut:
 
 - **K-Nearest Neighbor**
-  Model dilatih menggunakan nilai n_neighbors sebesar 12 dengan metrik jarak **Euclidean**. Algoritma ini cocok digunakan pada data yang ukurannya kecil dan pola non-linear seperti dataset ini.
+  Model dilatih menggunakan nilai n_neighbors sebesar 12 dengan metrik jarak **Euclidean**. Jarak yang diambil adalah sebesar 12 dengan iterasi terus menerus sehingga didapatkan nilai MSE untuk data train dan data test. Algoritma ini cocok digunakan pada data yang ukurannya kecil dan pola non-linear seperti dataset ini.
 
 - **Random Forest**
-  Model menggunakan n_estimators sebanyak 100 dengan maksimal kedalaman setiap estimator adalah sebesar 5, sedangkan nilai random_state yang digunakan adalah sebesar 12 dan n-jobs diisikan nilai -1. Random Forest sering digunakan untuk mendapatkan stabilitas yang mumpuni.
+  Random Forest menggunakan model ensemble yang pada proyek ini diatur value parameter pada n_estimators sebanyak 100 dengan maksimal kedalaman setiap estimator adalah sebesar 5, sedangkan nilai random_state yang digunakan adalah sebesar 12 dan n-jobs diisikan nilai -1. Random Forest sering digunakan untuk mendapatkan stabilitas saat melakukan prediksi.
 
 - **Boosting Algorithm**
-  Model menggunakan nilai n_estimators sebesar 200 dengan learning_rate sebesar 0.05 dan random_state yang digunakan adalah 55. Boosting Algorithm yang digunakan adalah Adaptive Boosting yaitu AdaBoost.
+  Model menggunakan nilai n_estimators sebesar 200 dengan learning_rate sebesar 0.05 dan random_state yang digunakan adalah 55. Boosting Algorithm yang digunakan adalah Adaptive Boosting yaitu AdaBoost. Iterasi yang dilakukan terus menerus sebanyak jumlah yang ditentukan, memungkinkan akurasi data yang semakin baik.
 
 ## Evaluation
 
