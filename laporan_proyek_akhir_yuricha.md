@@ -195,21 +195,21 @@ Pada tahap ini, sistem akan dibangun berdasarkan sinopsis dari tiap drama yang a
 
 Outputnya adalah menghasilkan matrix (1062, 9450) lalu dijadikan dalam bentuk matrix dengan menggunakan fungsi `.dense()`. Selanjutnya adalah melihat matriks drama_name dengan nilai bobot yang sudah dikombinasikan sehingga menghasilkan gambar sebagai berikut:
 
-[gambar1]
+![matrix tf-idf](https://github.com/esteryuricha/ml-advanced/blob/main/images/1_matrix_tf_idf.png?raw=true)
 
 ## Cosine Similarity
 
 Setelah mendapatkan korelasi dari drama dan sinopsis, langkah selanjutnya adalah menghitung derajat kesamaan (similarity degree) antara drama satu dan drama lainnya dengan menggunakan teknik cosine similarity. Berikut merupakan hasil dari cosine similarity pada matrix tf-idf yang telah dibuat sebelumnya.
 
-[gambar2]
+![cosine similarity](https://github.com/esteryuricha/ml-advanced/blob/main/images/2_cosine_sim.png?raw=true)
 
 Lalu diambil 5 sampel terhadap 5 drama yang ada, dan muncullah data sebagai berikut:
 
-[gambar3]
+![drama samples](https://github.com/esteryuricha/ml-advanced/blob/main/images/3_similarity_in_shape.png?raw=true)
 
 Terlihat juga heatmap dari hasil similarity yang ada sebagai berikut:
 
-[gambar4]
+![heatmap](https://github.com/esteryuricha/ml-advanced/blob/main/images/4_heatmap.png?raw=true)
 
 ## Modeling
 
@@ -228,8 +228,6 @@ Cosine Similarity digunakan untuk menghitung kemiripan antar-vektor drama. Drama
   - Cosine Similarity sebagai metrik utama.
 
 Dalam mempermudah dalam menampilkan rekomendasi drama, dibuat suatu function bernama recommend_drama yang nantinya akan menghasilkan rekomendasi drama beserta detil informasinya yang tersimpan pada dataframe.
-
-` def recommend_drama(title, cosine_sim=cosine_sim, data=data, actor_weight=0.1, director_weight=0.1, screenwriter_weight=0.6, synopsis_weight=0.2):`
 
 #### Contoh Penggunaan
 
@@ -251,17 +249,13 @@ Evaluasi dilakukan dengan meminta user untuk menginputkan drama yang ingin dimas
 
 Data rinci mengenai drama "hospital playlist" adalah sebagai berikut:
 
-[gambar]
+![detil](https://github.com/esteryuricha/ml-advanced/blob/main/images/6_detil%20informasi.png?raw=true)
 
 Contoh hasil rekomendasi 3 drama yang bisa ditonton berikutnya adalah:
 
-[gambar]
+![hasil rekomendasi](https://github.com/esteryuricha/ml-advanced/blob/main/images/5_top3_recommendation.png?raw=true)
 
 dapat dilihat dari kedua tabel bahwa ada hal yang membuat menjadi rekomendasi teratas karena memiliki screenwriter yang sama dan juga ada aktor yang turut bermain di drama yang sama.
-
-Kemudian dilihat pula hasil similarity score-nya sebagai berikut:
-
-[gambar]
 
 ### Metrik Evaluasi
 
