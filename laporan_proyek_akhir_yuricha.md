@@ -2,30 +2,43 @@
 
 ## Project Overview
 
-Proyek ini membuat sebuah sistem rekomendasi drama-drama korea yang bisa ditonton dan memiliki tingkat similarity dengan drama yang ingin ditonton oleh pengguna. Sistem rekomendasi ini menggunakan pendekatan berbasis konten dengan fitur, seperti sinopsis (synopsis), aktor (actor), sutradara (director), dan penulis naskah (screenwriter). Dataset yang digunakna dalam membangun sistem rekomendasi ini diunduh melalui Kaggle dan diproses dengan pendekatan _Content Based Filtering_ untuk mendapatkan drama-drama yang memiliki tingkat similaritas menggunakan _Cosine Similarity_.
+### Latar Belakang
+
+Di era digital saat ini, pengguna memiliki akses ke ribuan judul drama Korea melalui berbagai platform streaming. Saking banyaknya pilihan, membuat pengguna sering kali kebingungan sampai menjadi **paradox of choice**, di mana pengguna merasa kesulitan memilih drama yang sesuai dengan preferensi mereka. Netflix sebagai salah satu OTT yang sukses mencapai keunggulan kompetitif melalui recommender system dan membuat penggunanya tetap menggunakan layanan streaming tersebut [[1]](https://sj.eastasouth-institute.com/index.php/smb/article/view/61/43). Oleh karena itu, sistem rekomendasi merupakan hal yang penting untuk saat ini di era pilihan yang terlampau banyak sehingga dapat membantu pengguna menemukan drama yang relevan berdasarkan preferensi mereka.
+
+Sistem rekomendasi berbasis konten (content-based filtering) adalah salah satu metode yang populer karena mampu memberikan rekomendasi yang personal berdasarkan atribut drama, seperti **sinopsis**, **aktor**, **sutradara**, dan **penulis naskah**. Dengan menggunakan pendekatan ini, proyek ini bertujuan untuk mengembangkan sistem rekomendasi drama Korea yang relevan dan meningkatkan pengalaman pengguna.
+
+### Tujuan Proyek
+
+- **Membangun sistem rekomendasi drama Korea berbasis konten** yang dapat memberikan rekomendasi drama dengan tingkat similaritas tinggi berdasarkan drama yang ditonton sebelumnya.
+- Memberikan **top-3 rekomendasi drama Korea** yang relevan kepada pengguna dengan memanfaatkan fitur berbobot seperti sinopsis, aktor, sutradara, dan penulis naskah.
+
+---
 
 ## Business Understanding
 
 ### Problem Statements
 
-- Bagaimana membangun sistem rekomendasi berbasis konten dengan mempertimbangkan fitur seperti synopsis, aktor, sutradara, dan penulis naskah?
-- Bagaimana caranya memberikan rekomendasi Top 3 drama Korea yang relevan berdasarkan drama yang sudah ditonton sebelumnya oleh pengguna?
+1. Bagaimana membangun sistem rekomendasi berbasis konten dengan mempertimbangkan fitur seperti sinopsis, aktor, sutradara, dan penulis naskah?
+2. Bagaimana memberikan rekomendasi top-3 drama Korea yang relevan berdasarkan drama yang ditonton sebelumnya oleh pengguna?
 
 ### Goals
 
-- Mengembangkan sistem rekomendasi drama Korea berbasis fitur dengan bobot yang ditentukan sehingga dapat merekomendasikan Top 3 drama yang relevan.
+1. Mengembangkan sistem rekomendasi drama Korea berbasis fitur dengan bobot yang ditentukan.
+2. Menghasilkan rekomendasi top-3 drama yang relevan untuk pengguna.
 
 ### Solution Statement
 
-Sistem rekomendasi akan dibangun menggunakan pendekatan _Content Based Filtering_. Setiap drama akan diwakili sebagai vektor yang berisi bobot fitur:
+Sistem rekomendasi dibangun menggunakan **Content-Based Filtering**. Setiap drama direpresentasikan sebagai vektor yang menggabungkan bobot fitur berikut:
 
-- **Actor** (bobot 3)
-- **Director** (bobot 1)
-- **Screenwriter** (bobot 6)
-- **Synopsis** (bobot 1)
+- **Actor** (bobot: 0.3)
+- **Director** (bobot: 0.1)
+- **Screenwriter** (bobot: 0.6)
+- **Synopsis** (bobot: 0.2)
 
-Pembobotan ini didasarkan bahwa sistem rekomendasi mampu memberikan rekomendasi drama dengan cerita yang mirip dengan drama yang ditonton sebelumnya sehingga dapat menggunakan **synopsis** dengan bobot terbesar.
-Kemiripan antar-drama akan dihitung menggunakan _Cosine Similarity_.
+Kemiripan antar-drama dihitung menggunakan **Cosine Similarity**, dengan drama yang memiliki nilai similaritas tertinggi direkomendasikan kepada pengguna.
+
+---
 
 ## Data Understanding
 
@@ -40,10 +53,14 @@ Kemiripan antar-drama akan dihitung menggunakan _Cosine Similarity_.
 
 Terdapat 4 dataset yang digunakan dalam proyek ini yaitu:
 
-- korean_drama.csv: berisi data drama yang ada dikumpulkan dari tahun 2015 - 2023 dan di-assign pada variabel `dramas` dengan jumlah data sebanyak 1752
-- reviews.csv: berisi review drama-drama dari user beserta dengan rating-rating yang ada dan di-assign pada variabel `reviews` dengan jumlah data sebanyak 4562
-- wiki_actors.csv: berisi daftar aktor yang bermain di drama-drama dan di-assign pada variabel `actors` dengan jumlah data sebanyak 3090
-- recommendations.csv: berisi rekomendasi drama berdasarkan judul drama yang ditonton dan rekomendasi ini didapatkan dari komunitas MyDramaList dan di-assign pada variabel `recommends` dan nantinya akan digunakan sebagai _Ground Truth_ dengan jumlah data sebanyak 1753.
+| **Dataset**         | **Deskripsi**                                                                                                                                                                                                                                   |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| korean_drama.csv    | data drama yang ada dikumpulkan dari tahun 2015 - 2023 dan di-assign pada variabel `dramas` dengan jumlah data sebanyak 1752                                                                                                                    |
+| reviews.csv         | review drama-drama dari user beserta dengan rating-rating yang ada dan di-assign pada variabel `reviews` dengan jumlah data sebanyak 4562                                                                                                       |
+| wiki_actors.csv     | daftar aktor yang bermain di drama-drama dan di-assign pada variabel `actors` dengan jumlah data sebanyak 3090                                                                                                                                  |
+| recommendations.csv | rekomendasi drama berdasarkan judul drama yang ditonton dan rekomendasi ini didapatkan dari komunitas MyDramaList dan di-assign pada variabel `recommends` dan nantinya akan digunakan sebagai _Ground Truth_ dengan jumlah data sebanyak 1753. |
+
+---
 
 ### Univariate Exploratory Data Analysis
 
@@ -125,9 +142,11 @@ Dataset ini digunakan sebagai Ground Truth dan jika diterapkan perintah `recomme
 
 Dataset ini memiliki 573 drama yang tidak memiliki rekomendasi dari komunitas, dan data ini nantinya yang akan diamputasi.
 
-## Data Preprocessing
+---
 
-Tahap ini merupakan tahapn persiapan data sebelum data digunakan untuk proses selanjutnya. Setiap data yang telah melalui tahapan univariate exploratory data analysis akan melewati tahapan ini.
+## Data Preparation
+
+Tahap ini merupakan tahapn persiapan data sebelum data digunakan untuk proses selanjutnya. Setiap data yang telah melalui tahapan univariate exploratory data analysis akan melewati tahapan ini. Data dipersiapkan dan beberapa bagian dilakukan untuk mengatasi missing value baik dihilangkan ataupun diisi dengan data yang dapat digunakan dalam model development.
 
 ### Menggabung nama aktor berdasarkan drama ke dalam bentuk list
 
@@ -155,10 +174,6 @@ Melihat dari penggabungan data yang ada, didapatkan bahwa ada satu drama bisa sa
 
 Setelah itu yang harus dilakukan, review yang sudah dijumlahkan ratingnya akan digabungkan dengan data drama dan terakhir adalah mendapatkan data yang sudah digabungkan ketiga dataframe ke dalam variabel _all_drama_.
 
-## Data Preparation
-
-Pada tahap ini, data dipersiapkan dan beberapa bagian dilakukan untuk mengatasi missing value baik dihilangkan ataupun diisi dengan data yang dapat digunakan dalam model development.
-
 ### Mengatasi missing value pada kolom director dan screenwriter
 
 Dari sekian kolom yang memiliki missing value, ada 2 kolom yang cukup memberi pengaruh pada bagian sistem rekomendasi ini, dan saya tertarik untuk mencari tahu seberapa besar persentase missing value pada data drama ini sehingga dapat diputuskan bahwa 2 kolom ini perlu di-imutable atau diisi dengan value lain.
@@ -181,53 +196,24 @@ Bagian ini diperlukan untuk membentuk dataframe yang tersorting secara ascending
 
 Selanjutnya adalah melakukan konversi data series menjadi list sehingga dapat digunakan dalam model development. Data series yang dimasukkan ke dalam list adalah _drama_name_, _actor_name_, _director_, _screenwriter_, _rank_, _overall_score_, dan _synopsis_. Dengan menggunakan perintah `drama_new.info()` didapatkan bahwa list berisi 835 baris dengan 7 kolom.
 
-## Modelling
+---
 
-Sistem rekomendasi yang akan dibuat menggunakan pendekatan content based filtering. Di awal, kita akan melihat data assign dataframe dari _drama_new_ yang akan diberikan nama baru yaitu **data**
+## Modeling and Result
 
-### TF-IDF Vectorizer
+### Pendekatan Modeling
 
-Pada tahap ini, sistem akan dibangun berdasarkan sinopsis dari tiap drama yang ada dengan tahapan sebagai berikut:
+**1. Content-Based Filtering**
 
-- Inisialisasi TfidVectorizer dengan perintah `tf = TfidfVectorizer`
-- Menentukan bobot untuk masing-masing fitur yang akan dimasukkan dalam model, dimana _actor_ memiliki bobot 3, _director_ bobot 1, _screenwriter_ bobot 6, sisanya pada fitur _synopsis_ sebesar bobot 1. Tujuannya adalah dengan adanya bobot, prioritas rekomendasi akan lebih fokus ke synopsis terlebih dahulu baru ke aktor yang memerankan dramanya dst.
-- Memproses data gabungan dengan `stop_words = 'english'` dan transform menggunakan kolom yang baru dibuat yaitu _combined_features_
+- Menggunakan cosine similarity untuk menghitung kemiripan antar-drama berdasarkan fitur:
+  - **Synopsis** (bobot: 0.2)
+  - **Actor** (bobot: 0.3)
+  - **Director** (bobot: 0.1)
+  - **Screenwriter** (bobot: 0.6)
 
-Outputnya adalah menghasilkan matrix (1062, 9450) lalu dijadikan dalam bentuk matrix dengan menggunakan fungsi `.dense()`. Selanjutnya adalah melihat matriks drama_name dengan nilai bobot yang sudah dikombinasikan sehingga menghasilkan gambar sebagai berikut:
+**2. Top-N Recommendation**
 
-![matrix tf-idf](https://github.com/esteryuricha/ml-advanced/blob/main/images/1_matrix_tf_idf.png?raw=true)
-
-## Cosine Similarity
-
-Setelah mendapatkan korelasi dari drama dan sinopsis, langkah selanjutnya adalah menghitung derajat kesamaan (similarity degree) antara drama satu dan drama lainnya dengan menggunakan teknik cosine similarity. Berikut merupakan hasil dari cosine similarity pada matrix tf-idf yang telah dibuat sebelumnya.
-
-![cosine similarity](https://github.com/esteryuricha/ml-advanced/blob/main/images/2_cosine_sim.png?raw=true)
-
-Lalu diambil 5 sampel terhadap 5 drama yang ada, dan muncullah data sebagai berikut:
-
-![drama samples](https://github.com/esteryuricha/ml-advanced/blob/main/images/3_similarity_in_shape.png?raw=true)
-
-Terlihat juga heatmap dari hasil similarity yang ada sebagai berikut:
-
-![heatmap](https://github.com/esteryuricha/ml-advanced/blob/main/images/4_heatmap.png?raw=true)
-
-## Modeling
-
-### Pendekatan: Cosine Similarity
-
-Cosine Similarity digunakan untuk menghitung kemiripan antar-vektor drama. Drama yang memiliki nilai kemiripan tertinggi akan direkomendasikan kepada pengguna.
-
-- **Proses**:
-
-  1. Menggabungkan atribut berbobot menjadi vektor tunggal.
-  2. Menghitung Cosine Similarity antar-vektor.
-  3. Menampilkan top-3 drama yang paling mirip dengan drama yang sudah ditonton pengguna.
-
-- **Parameter yang Digunakan**:
-  - Fitur berbobot (aktor, sutradara, penulis naskah, dan sinopsis).
-  - Cosine Similarity sebagai metrik utama.
-
-Dalam mempermudah dalam menampilkan rekomendasi drama, dibuat suatu function bernama recommend_drama yang nantinya akan menghasilkan rekomendasi drama beserta detil informasinya yang tersimpan pada dataframe.
+- Drama dengan skor similarity tertinggi (kecuali drama input) akan direkomendasikan sebagai **Top-3**.
+- Dalam mempermudah dalam menampilkan rekomendasi drama, dibuat suatu function bernama recommend_drama yang nantinya akan menghasilkan rekomendasi drama beserta detil informasinya yang tersimpan pada dataframe.
 
 #### Contoh Penggunaan
 
@@ -243,54 +229,80 @@ recommend_drama(
 )
 ```
 
-## Evaluasi
+#### Contoh Detil Informasi Drama (Contoh: _Hospital Playlist_)
 
-Evaluasi dilakukan dengan meminta user untuk menginputkan drama yang ingin dimasukkan ke dalam sistem rekomendasi. Pada case ini menggunakan contoh "hospital playlist". Dikarenakan nama drama pada dataframe menggunakan huruf kapital di setiap kata-nya, maka judul yang diinputkan oleh user akan diberikan fungsi `.title()` agar dapat menyesuaikan dengan data.
+| **Nama Drama**    | **Overall Score** | **Actor**                                         | **Director**    | **Screenwriter** | **Synopsis**                                      |
+| ----------------- | ----------------- | ------------------------------------------------- | --------------- | ---------------- | ------------------------------------------------- |
+| Hospital Playlist | 6.5               | ['Jeon Mi Do', 'Jo Jung Suk', 'Jung Kyung Ho',..] | ['Shin Won Ho'] | ['Lee Woo Jung'] | The stories of people going through their days... |
 
-Data rinci mengenai drama "hospital playlist" adalah sebagai berikut:
+#### Hasil Rekomendasi (Contoh: _Hospital Playlist_)
 
-![detil](https://github.com/esteryuricha/ml-advanced/blob/main/images/6_detil%20informasi.png?raw=true)
+| **Nama Drama**               | **Overall Score** | **Actor**                                          | **Director**    | **Screenwriter** | **Synopsis**                                      |
+| ---------------------------- | ----------------- | -------------------------------------------------- | --------------- | ---------------- | ------------------------------------------------- |
+| _Hospital Playlist Season 2_ | 8.0               | ['Jeon Mi Do', 'Jo Jung Suk', 'Jung Kyung Ho',...] | ['Shin Won Ho'] | ['Lee Woo Jung'] | Everyday is extraordinary for five doctors and..  |
+| _Reply 1988_                 | 9.5               | ['Go Kyung Pyo', 'Lee Dong Hwi', 'Lee Hye Ri',..]  | ['Shin Won Ho'] | ['Lee Woo Jung'] | Five childhood friends, who all live in the sa... |
+| _Prison Playbook_            | 6.5               | ['Im Hwa Young', 'Jung Kyung Ho', 'Kim Kyung N...] | ['Shin Won Ho'] | ['Lee Woo Jung'] | Kim Je Hyuk, a famous baseball player, is arre... |
 
-Contoh hasil rekomendasi 3 drama yang bisa ditonton berikutnya adalah:
+Terlihat bahwa hasil rekomendasi memprioritaskan Data **Screenwriter** dan **Actor** yang sama dan baru melihat dari **Synopsis** dan **Director**.
 
-![hasil rekomendasi](https://github.com/esteryuricha/ml-advanced/blob/main/images/5_top3_recommendation.png?raw=true)
+---
 
-dapat dilihat dari kedua tabel bahwa ada hal yang membuat menjadi rekomendasi teratas karena memiliki screenwriter yang sama dan juga ada aktor yang turut bermain di drama yang sama.
+## Evaluation
 
 ### Metrik Evaluasi
 
-kemudian metrik evaluasi dengan mengambil nilai precision, recall, f1-score, dan accuracy. Dari data terlihat bahwa jika diinputkan dengan drama "Hospital Playlist" akan menghasilkan sebagai berikut:
+Untuk mengevaluasi sistem rekomendasi, digunakan metrik berikut:
 
-- precision: 0.50
-  Dari semua drama yang direkomendasikan, hanya 50% yang benar-benar relevan berdasarkan ground truth.
-  Ini menunjukkan bahwa sistem menghasilkan beberapa rekomendasi yang tidak relevan (false positives).
+1. **Precision**: Proporsi rekomendasi yang relevan.
+   \[
+   \text{Precision} = \frac{\text{True Positives}}{\text{True Positives + False Positives}}
+   \]
+2. **Recall**: Proporsi item relevan yang berhasil direkomendasikan.
+   \[
+   \text{Recall} = \frac{\text{True Positives}}{\text{True Positives + False Negatives}}
+   \]
+3. **F1-Score**: Rata-rata harmonis antara precision dan recall.
+   \[
+   \text{F1-Score} = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision + Recall}}
+   \]
+4. **Accuracy**: Proporsi rekomendasi yang benar.
 
-- recall: 1.00
-  Semua drama yang relevan dalam ground truth berhasil direkomendasikan oleh sistem.
-  Ini menunjukkan bahwa sistem sangat baik dalam mencakup semua pilihan yang benar (no false negatives).
+#### Hasil Evaluasi
 
-- F1-score: 0.67
-  F1-score adalah harmoni antara precision dan recall. Dengan nilai 0.67, ini menunjukkan bahwa performa sistem masih cukup baik tetapi perlu meningkatkan precision untuk lebih akurat.
+| **Metric** | **Score** |
+| ---------- | --------- |
+| Precision  | 0.50      |
+| Recall     | 1.00      |
+| F1-Score   | 0.67      |
+| Accuracy   | 0.50      |
 
-- Accuracy: 0.50
-  Secara keseluruhan, hanya 50% dari semua drama (baik yang relevan maupun tidak relevan) yang diprediksi dengan benar.
-  Ini menunjukkan bahwa separuh prediksi sistem tidak sesuai dengan ground truth.
+### Interpretasi Hasil
 
-### Hasil
+- Precision rendah (0.50) menunjukkan beberapa rekomendasi tidak relevan (false positives tinggi).
+- Recall tinggi (1.00) menunjukkan semua drama relevan berhasil direkomendasikan.
+- F1-Score cukup baik (0.67), tetapi precision perlu ditingkatkan.
+- Accuracy rendah (0.50), menunjukkan sistem masih memiliki ruang untuk perbaikan.
 
-**Relevansi**: Hanya 50% rata-rata precision hasil rekomendasi yang sesuai dengan rekomendasi dari komunitas MyDramaList. Hal ini dapat terjadi karena kurang cukupnya informasi mengenai rekomendasi dari MyDramaList berdasarkan apa. Jika dianalisis manual, genre dari drama adalah hal yang penting, tetapi pada dataset tidak memiliki data genre, sehingga kesulitan dalam membuat model yang tepat.
+---
 
 ## Kesimpulan
 
-- Sistem rekomendasi berbasis atribut memberikan hasil rekomendasi dapat memberikan tingkat similarity yang sesuai dengan dataset yang disediakan.
-- Pendekatan berbasis konten dengan Cosine Similarity sangat cocok untuk dataset drama Korea dengan atribut deskriptif seperti synopsis, aktor, sutradara, dan penulis naskah.
-- Ground Truth yang ada memberikan rekomendasi berdasarkan genre dan aktor sedangkan genre tidak terdaftar pada dataset sehingga sulit untuk mendapatkan data precision yang sesuai.
+1. Sistem rekomendasi berbasis atribut memberikan rekomendasi yang relevan berdasarkan fitur deskriptif drama.
+2. Pendekatan cosine similarity efektif untuk menghitung kemiripan antar-drama.
+3. Ground truth MyDramaList cenderung didasarkan pada genre, tetapi dataset tidak memiliki informasi genre sehingga precision rendah.
 
-## Dampak Bisnis
+---
 
-Dampak bisnis yang diharapkan adalah menambah kepuasan pengguna dan dapat mencapai keunggulan kompetitif
+## Saran Perbaikan
+
+1. Menambahkan fitur genre ke dalam dataset untuk meningkatkan relevansi rekomendasi.
+2. Menyesuaikan bobot fitur agar precision lebih tinggi tanpa mengorbankan recall.
+3. Menggunakan teknik **hyperparameter tuning** untuk meningkatkan performa model.
+
+---
 
 ## Referensi
 
-- Dataset Diabetes dari Kaggle (https://www.kaggle.com/datasets/chanoncharuchinda/ korean-drama-2015-23-actor-and-reviewmydramalist)
-- studi kasus sistem rekomendasi [machine learning terapan](https://www.dicoding.com/academies/319/tutorials/17069)
+- Referensi Latar Belakang: [Strategi Netflix](https://sj.eastasouth-institute.com/index.php/smb/article/view/61/43)
+- Kaggle: [Korean Drama Dataset](https://www.kaggle.com/datasets/chanoncharuchinda/korean-drama-2015-23-actor-and-reviewmydramalist)
+- Dicoding: [Studi Kasus Sistem Rekomendasi](https://www.dicoding.com/academies/319/tutorials/17069)
