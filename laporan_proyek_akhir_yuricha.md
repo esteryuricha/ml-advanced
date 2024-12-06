@@ -4,7 +4,7 @@
 
 ### Latar Belakang
 
-Di era digital saat ini, pengguna memiliki akses ke ribuan judul drama Korea melalui berbagai platform streaming. Saking banyaknya pilihan, membuat pengguna sering kali kebingungan sampai menjadi **paradox of choice**, di mana pengguna merasa kesulitan memilih drama yang sesuai dengan preferensi mereka. Netflix sebagai salah satu OTT yang sukses mencapai keunggulan kompetitif melalui recommender system dan membuat penggunanya tetap menggunakan layanan streaming tersebut [[1]](https://sj.eastasouth-institute.com/index.php/smb/article/view/61/43). Oleh karena itu, sistem rekomendasi merupakan hal yang penting untuk saat ini di era pilihan yang terlampau banyak sehingga dapat membantu pengguna menemukan drama yang relevan berdasarkan preferensi mereka.
+Di era digital saat ini, pengguna memiliki akses ke ribuan judul drama Korea melalui berbagai platform streaming. Saking banyaknya pilihan, membuat pengguna sering kali kebingungan sampai menjadi **paradox of choice**, di mana pengguna merasa kesulitan memilih drama yang sesuai dengan preferensi mereka. Netflix sebagai salah satu OTT yang sukses mencapai keunggulan kompetitif melalui recommender system dan membuat penggunanya tetap menggunakan layanan streaming tersebut. Oleh karena itu, sistem rekomendasi merupakan hal yang penting untuk saat ini di era pilihan yang terlampau banyak sehingga dapat membantu pengguna menemukan drama yang relevan berdasarkan preferensi mereka.
 
 Sistem rekomendasi berbasis konten (content-based filtering) adalah salah satu metode yang populer karena mampu memberikan rekomendasi yang personal berdasarkan atribut drama, seperti **sinopsis**, **aktor**, **sutradara**, dan **penulis naskah**. Dengan menggunakan pendekatan ini, proyek ini bertujuan untuk mengembangkan sistem rekomendasi drama Korea yang relevan dan meningkatkan pengalaman pengguna.
 
@@ -190,11 +190,25 @@ Ground Truth memiliki missing value yang harus dihapus terlebih dahulu agar tida
 
 ### Sorting data untuk mendapatkan fix data
 
-Bagian ini diperlukan untuk membentuk dataframe yang tersorting secara ascending sehingga dapat dilihat data drama berurutan sesuai abjad berdasarkan nama drama-nya. Dari data ini terlihat dari nama drama yang duplikat, sehingga akan dihapus data yang duplikat berdasarkan nama drama dan didapatkan ada _1062 data_ drama yang bisa diproses.
+Bagian ini diperlukan untuk membentuk dataframe yang tersorting secara ascending sehingga dapat dilihat data drama berurutan sesuai abjad berdasarkan nama drama-nya. Dari data ini terlihat dari nama drama yang duplikat, sehingga akan dihapus data yang duplikat berdasarkan nama drama dan didapatkan ada _835 data_ drama yang bisa diproses.
 
 ### Konversi data series ke dalam bentuk list
 
 Selanjutnya adalah melakukan konversi data series menjadi list sehingga dapat digunakan dalam model development. Data series yang dimasukkan ke dalam list adalah _drama_name_, _actor_name_, _director_, _screenwriter_, _rank_, _overall_score_, dan _synopsis_. Dengan menggunakan perintah `drama_new.info()` didapatkan bahwa list berisi 835 baris dengan 7 kolom.
+
+istem rekomendasi yang akan dibuat menggunakan pendekatan content based filtering. Di awal, kita akan melihat data assign dataframe dari _drama_new_ yang akan diberikan nama baru yaitu **data**
+
+### TF-IDF Vectorizer
+
+Pada tahap ini, sistem akan dibangun berdasarkan sinopsis dari tiap drama yang ada dengan tahapan sebagai berikut:
+
+- Inisialisasi TfidVectorizer dengan perintah `tf = TfidfVectorizer`
+- Menentukan bobot untuk masing-masing fitur yang akan dimasukkan dalam model, dimana _actor_ memiliki bobot 3, _director_ bobot 1, _screenwriter_ bobot 6, sisanya pada fitur _synopsis_ sebesar bobot 1. Tujuannya adalah dengan adanya bobot, prioritas rekomendasi akan lebih fokus ke synopsis terlebih dahulu baru ke aktor yang memerankan dramanya dst.
+- Memproses data gabungan dengan `stop_words = 'english'` dan transform menggunakan kolom yang baru dibuat yaitu _combined_features_
+
+Outputnya adalah menghasilkan matrix (1062, 9450) lalu dijadikan dalam bentuk matrix dengan menggunakan fungsi `.dense()`. Selanjutnya adalah melihat matriks drama_name dengan nilai bobot yang sudah dikombinasikan sehingga menghasilkan gambar sebagai berikut:
+
+![matrix tf-idf](https://github.com/esteryuricha/ml-advanced/blob/main/images/1_matrix_tf_idf.png?raw=true)
 
 ---
 
@@ -254,17 +268,8 @@ Terlihat bahwa hasil rekomendasi memprioritaskan Data **Screenwriter** dan **Act
 Untuk mengevaluasi sistem rekomendasi, digunakan metrik berikut:
 
 1. **Precision**: Proporsi rekomendasi yang relevan.
-   \[
-   \text{Precision} = \frac{\text{True Positives}}{\text{True Positives + False Positives}}
-   \]
 2. **Recall**: Proporsi item relevan yang berhasil direkomendasikan.
-   \[
-   \text{Recall} = \frac{\text{True Positives}}{\text{True Positives + False Negatives}}
-   \]
 3. **F1-Score**: Rata-rata harmonis antara precision dan recall.
-   \[
-   \text{F1-Score} = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision + Recall}}
-   \]
 4. **Accuracy**: Proporsi rekomendasi yang benar.
 
 #### Hasil Evaluasi
